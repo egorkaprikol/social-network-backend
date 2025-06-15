@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: social-network-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    container_name: social-postgres
+    environment:
+      POSTGRES_DB: social_network
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    ports:
+      - "5433:5432" # Первый порт указывается как внешний, то есть тот, с которого будет подключение извне(DBeaver,PgAdmin)
+
+volumes: 
+  pgdata: # Все данные базы хранятся в volume pgdata
