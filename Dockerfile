@@ -6,13 +6,19 @@ WORKDIR /app
 # Копирование зависимостей
 COPY requirements.txt .
 
+# Установка пакетов: netcat, gcc и libpq-dev для psycopg2
+RUN apt-get update && apt-get install -y netcat-openbsd gcc libpq-dev
+
 # Установка зависимостей
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Открываем порт, на случай если он закрыт
+# Права на скрипт
+RUN chmod +x /app/entrypoint.sh
+
+# Открытие порта, на случай если он закрыт
 EXPOSE 8000
 
-# Запуск сервера
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Использование скрипта
+ENTRYPOINT ["/app/entrypoint.sh"]
