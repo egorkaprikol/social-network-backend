@@ -11,11 +11,13 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
+    # Формирование строки для подключения к базе данных
     @property
     def DATABASE_URL(self) -> str:
         return (f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
                 f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}")
 
+    # Чтение .env файла
     class Config:
         env_file = ".env"
 
